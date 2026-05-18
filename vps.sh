@@ -1,6 +1,29 @@
 #!/bin/bash
 
+check_root() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "错误：需要以root用户运行此脚本"
+        echo "请使用 sudo -i 切换到root用户后再运行"
+        exit 1
+    fi
+}
+
+wait_return() {
+    echo ""
+    read -n 1 -s -p "按任意键返回主菜单..."
+    echo ""
+    echo ""
+}
+
+error_exit() {
+    echo "错误：$1"
+    wait_return
+}
+
+check_root
+
 while true; do
+    clear
     echo "=================================="
     echo "          星诺常用VPS脚本          "
     echo "=================================="
@@ -24,164 +47,182 @@ while true; do
     echo ""
     read -p "请输入选项（0-12）: " input
 
-    if [ "$input" -eq 0 ]; then
+    if ! [[ "$input" =~ ^[0-9]+$ ]]; then
         echo ""
-        echo "感谢使用！脚本已退出。"
-        exit 0
-    elif [ "$input" -eq 1 ]; then
+        echo "无效输入！请输入数字"
+        sleep 1
         echo ""
-        echo "正在下载回程线路测试脚本..."
-        echo "----------------------------------"
-        curl https://raw.githubusercontent.com/ludashi2020/backtrace/main/install.sh -sSf | sh
-        echo "----------------------------------"
-        echo "测试完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 2 ]; then
-        echo ""
-        echo "正在下载并安装SpeedTest..."
-        echo "----------------------------------"
-        curl -sL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | tar -xz && rm speedtest.* && mv ./speedtest /usr/local/bin/speedtest && speedtest -s 74653
-        echo "----------------------------------"
-        echo "测速完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 3 ]; then
-        echo ""
-        echo "正在下载并执行融合怪测试脚本..."
-        echo "----------------------------------"
-        curl -L https://gitlab.com/spiritysdx/za/-/raw/main/ecs.sh -o ecs.sh && chmod +x ecs.sh && bash ecs.sh
-        echo "----------------------------------"
-        echo "按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 4 ]; then
-        echo ""
-        echo "正在执行Akile DNS修改脚本..."
-        echo "----------------------------------"
-        wget -qO- https://raw.githubusercontent.com/akile-network/aktools/refs/heads/main/akdns.sh | bash
-        echo "----------------------------------"
-        echo "DNS修改完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 5 ]; then
-        echo ""
-        echo "正在安装3X-UI面板..."
-        echo "----------------------------------"
-        bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-        echo "----------------------------------"
-        echo "3X-UI面板安装完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 6 ]; then
-        echo ""
-        echo "正在检测3X-UI面板安装状态..."
-        echo "----------------------------------"
-        if [ -d "/etc/x-ui" ] || systemctl is-active --quiet x-ui; then
-            echo "检测到3X-UI面板已安装，正在升级..."
-            bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) --upgrade
-            echo "----------------------------------"
-            echo "3X-UI面板升级完成！按任意键返回主菜单..."
-        else
-            echo "未检测到3X-UI面板，请先安装后再升级"
-            echo "----------------------------------"
-            echo "按任意键返回主菜单..."
-        fi
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 7 ]; then
-        echo ""
-        echo "正在安装S-UI面板..."
-        echo "----------------------------------"
-        bash <(curl -Ls https://raw.githubusercontent.com/alireza0/s-ui/master/install.sh)
-        echo "----------------------------------"
-        echo "S-UI面板安装完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 8 ]; then
-        echo ""
-        echo "正在检测S-UI面板安装状态..."
-        echo "----------------------------------"
-        if [ -d "/etc/s-ui" ] || systemctl is-active --quiet s-ui; then
-            echo "检测到S-UI面板已安装，正在升级..."
-            bash <(curl -Ls https://raw.githubusercontent.com/alireza0/s-ui/master/install.sh) --upgrade
-            echo "----------------------------------"
-            echo "S-UI面板升级完成！按任意键返回主菜单..."
-        else
-            echo "未检测到S-UI面板，请先安装后再升级"
-            echo "----------------------------------"
-            echo "按任意键返回主菜单..."
-        fi
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 9 ]; then
-        while true; do
-            clear
-            echo "1. 海外线路"
-            echo "2. 国内线路"
-            echo "0. 返回主菜单"
-            read -p "请选择下载源（0-2）: " realm_input
-
-            if [ "$realm_input" -eq 0 ]; then
-                break
-            elif [ "$realm_input" -eq 1 ]; then
-                echo ""
-                echo "正在从GitHub下载..."
-                echo "----------------------------------"
-                curl -L https://github.com/wcwq98/realm/releases/download/v3.1.21/realm.sh -o realm.sh && chmod +x realm.sh && ./realm.sh
-                echo "----------------------------------"
-                echo "Realm安装完成！按任意键返回子菜单..."
-                read -n 1 -s
-                echo ""
-                echo ""
-            elif [ "$realm_input" -eq 2 ]; then
-                echo ""
-                echo "正在从国内源下载..."
-                echo "----------------------------------"
-                curl -L https://host.wxgwxha.eu.org/https://github.com/wcwq98/realm/releases/download/v3.1.2/realm.sh -o realm.sh && chmod +x realm.sh && ./realm.sh
-                echo "----------------------------------"
-                echo "Realm安装完成！按任意键返回子菜单..."
-                read -n 1 -s
-                echo ""
-                echo ""
-            else
-                echo ""
-                echo "无效选项，请重新输入"
-                echo ""
-                sleep 1
-            fi
-        done
-    elif [ "$input" -eq 10 ]; then
-        echo ""
-        echo "正在执行懒人一键Sing-Box脚本..."
-        echo "----------------------------------"
-        bash <(curl -s https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh)
-        echo "----------------------------------"
-        echo "Sing-Box安装完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    elif [ "$input" -eq 11 ]; then
-        echo ""
-        echo "正在执行更多功能脚本..."
-        echo "----------------------------------"
-        bash <(curl -s https://raw.githubusercontent.com/everett7623/vps_scripts/main/vps_scripts.sh)
-        echo "----------------------------------"
-        echo "脚本执行完成！按任意键返回主菜单..."
-        read -n 1 -s
-        echo ""
-        echo ""
-    else
-        echo ""
-        echo "无效选项，请重新输入"
-        echo ""
+        continue
     fi
+
+    case "$input" in
+        0)
+            echo ""
+            echo "感谢使用！脚本已退出。"
+            exit 0
+            ;;
+        1)
+            echo ""
+            echo "正在下载回程线路测试脚本..."
+            echo "----------------------------------"
+            curl https://raw.githubusercontent.com/ludashi2020/backtrace/main/install.sh -sSf | sh || error_exit "回程线路测试脚本执行失败"
+            echo "----------------------------------"
+            echo "测试完成！"
+            wait_return
+            ;;
+        2)
+            echo ""
+            echo "正在下载并安装SpeedTest..."
+            echo "----------------------------------"
+            curl -sL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | tar -xz && rm -f speedtest.* && mv ./speedtest /usr/local/bin/speedtest && speedtest -s 74653 || error_exit "SpeedTest安装或执行失败"
+            echo "----------------------------------"
+            echo "测速完成！"
+            wait_return
+            ;;
+        3)
+            echo ""
+            echo "正在下载并执行融合怪测试脚本..."
+            echo "----------------------------------"
+            curl -L https://gitlab.com/spiritysdx/za/-/raw/main/ecs.sh -o ecs.sh && chmod +x ecs.sh && bash ecs.sh || error_exit "融合怪测试脚本执行失败"
+            echo "----------------------------------"
+            wait_return
+            ;;
+        4)
+            echo ""
+            echo "正在执行NodeQuality测试..."
+            echo "----------------------------------"
+            bash <(curl -sL https://raw.githubusercontent.com/ssrsub/nodequality/main/nq.sh) || error_exit "NodeQuality测试执行失败"
+            echo "----------------------------------"
+            echo "NodeQuality测试完成！"
+            wait_return
+            ;;
+        5)
+            echo ""
+            echo "正在执行Akile DNS修改脚本..."
+            echo "----------------------------------"
+            wget -qO- https://raw.githubusercontent.com/akile-network/aktools/refs/heads/main/akdns.sh | bash || error_exit "DNS修改失败"
+            echo "----------------------------------"
+            echo "DNS修改完成！"
+            wait_return
+            ;;
+        6)
+            echo ""
+            echo "正在安装3X-UI面板..."
+            echo "----------------------------------"
+            bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) || error_exit "3X-UI面板安装失败"
+            echo "----------------------------------"
+            echo "3X-UI面板安装完成！"
+            wait_return
+            ;;
+        7)
+            echo ""
+            echo "正在检测3X-UI面板安装状态..."
+            echo "----------------------------------"
+            if [ -d "/etc/x-ui" ] || systemctl is-active --quiet x-ui 2>/dev/null; then
+                echo "检测到3X-UI面板已安装，正在升级..."
+                bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) --upgrade || error_exit "3X-UI面板升级失败"
+                echo "----------------------------------"
+                echo "3X-UI面板升级完成！"
+            else
+                echo "未检测到3X-UI面板，请先安装后再升级"
+                echo "----------------------------------"
+            fi
+            wait_return
+            ;;
+        8)
+            echo ""
+            echo "正在安装S-UI面板..."
+            echo "----------------------------------"
+            bash <(curl -Ls https://raw.githubusercontent.com/alireza0/s-ui/master/install.sh) || error_exit "S-UI面板安装失败"
+            echo "----------------------------------"
+            echo "S-UI面板安装完成！"
+            wait_return
+            ;;
+        9)
+            echo ""
+            echo "正在检测S-UI面板安装状态..."
+            echo "----------------------------------"
+            if [ -d "/etc/s-ui" ] || systemctl is-active --quiet s-ui 2>/dev/null; then
+                echo "检测到S-UI面板已安装，正在升级..."
+                bash <(curl -Ls https://raw.githubusercontent.com/alireza0/s-ui/master/install.sh) --upgrade || error_exit "S-UI面板升级失败"
+                echo "----------------------------------"
+                echo "S-UI面板升级完成！"
+            else
+                echo "未检测到S-UI面板，请先安装后再升级"
+                echo "----------------------------------"
+            fi
+            wait_return
+            ;;
+        10)
+            while true; do
+                clear
+                echo "=================================="
+                echo "          Realm转发面板           "
+                echo "=================================="
+                echo "1. 海外线路"
+                echo "2. 国内线路"
+                echo "0. 返回主菜单"
+                echo "=================================="
+                read -p "请选择下载源（0-2）: " realm_input
+
+                if ! [[ "$realm_input" =~ ^[0-2]$ ]]; then
+                    echo ""
+                    echo "无效选项，请重新输入"
+                    sleep 1
+                    echo ""
+                    continue
+                fi
+
+                case "$realm_input" in
+                    0)
+                        break
+                        ;;
+                    1)
+                        echo ""
+                        echo "正在从GitHub下载..."
+                        echo "----------------------------------"
+                        curl -L https://github.com/wcwq98/realm/releases/download/v3.1.21/realm.sh -o realm.sh && chmod +x realm.sh && ./realm.sh || error_exit "Realm安装失败"
+                        echo "----------------------------------"
+                        echo "Realm安装完成！"
+                        wait_return
+                        break
+                        ;;
+                    2)
+                        echo ""
+                        echo "正在从国内源下载..."
+                        echo "----------------------------------"
+                        curl -L https://host.wxgwxha.eu.org/https://github.com/wcwq98/realm/releases/download/v3.1.2/realm.sh -o realm.sh && chmod +x realm.sh && ./realm.sh || error_exit "Realm安装失败"
+                        echo "----------------------------------"
+                        echo "Realm安装完成！"
+                        wait_return
+                        break
+                        ;;
+                esac
+            done
+            ;;
+        11)
+            echo ""
+            echo "正在执行懒人一键Sing-Box脚本..."
+            echo "----------------------------------"
+            bash <(curl -s https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh) || error_exit "Sing-Box安装失败"
+            echo "----------------------------------"
+            echo "Sing-Box安装完成！"
+            wait_return
+            ;;
+        12)
+            echo ""
+            echo "正在执行更多功能脚本..."
+            echo "----------------------------------"
+            bash <(curl -s https://raw.githubusercontent.com/everett7623/vps_scripts/main/vps_scripts.sh) || error_exit "更多功能脚本执行失败"
+            echo "----------------------------------"
+            echo "脚本执行完成！"
+            wait_return
+            ;;
+        *)
+            echo ""
+            echo "无效选项，请输入0-12之间的数字"
+            sleep 1
+            echo ""
+            ;;
+    esac
 done
