@@ -33,19 +33,20 @@ while true; do
     echo "4. NodeQuality测试"
     echo "----------------------------------"
     echo "5. Akile DNS修改"
+    echo "6. IP-Sentinel 送中回送"
     echo "----------------------------------"
-    echo "6. 安装3X-UI面板"
-    echo "7. 升级3X-UI面板"
-    echo "8. 安装S-UI面板"
-    echo "9. 升级S-UI面板"
-    echo "10. Realm转发面板"
-    echo "11. 懒人一键Sing-Box"
-    echo "12. 更多功能"
+    echo "7. 安装3X-UI面板"
+    echo "8. 升级3X-UI面板"
+    echo "9. 安装S-UI面板"
+    echo "10. 升级S-UI面板"
+    echo "11. Realm转发面板"
+    echo "12. 懒人一键Sing-Box"
+    echo "13. 更多功能"
     echo "----------------------------------"
     echo "0. 退出脚本"
     echo "=================================="
     echo ""
-    read -p "请输入选项（0-12）: " input
+    read -p "请输入选项（0-13）: " input
 
     if ! [[ "$input" =~ ^[0-9]+$ ]]; then
         echo ""
@@ -107,6 +108,15 @@ while true; do
             ;;
         6)
             echo ""
+            echo "正在安装 IP-Sentinel 送中回送..."
+            echo "----------------------------------"
+            curl -fsSL https://raw.githubusercontent.com/hotyue/IP-Sentinel/main/core/install.sh -o /tmp/ins_agent.sh && bash /tmp/ins_agent.sh || error_exit "IP-Sentinel安装失败"
+            echo "----------------------------------"
+            echo "IP-Sentinel安装完成！"
+            wait_return
+            ;;
+        7)
+            echo ""
             echo "正在安装3X-UI面板..."
             echo "----------------------------------"
             bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) || error_exit "3X-UI面板安装失败"
@@ -114,7 +124,7 @@ while true; do
             echo "3X-UI面板安装完成！"
             wait_return
             ;;
-        7)
+        8)
             echo ""
             echo "正在检测3X-UI面板安装状态..."
             echo "----------------------------------"
@@ -129,7 +139,7 @@ while true; do
             fi
             wait_return
             ;;
-        8)
+        9)
             echo ""
             echo "正在安装S-UI面板..."
             echo "----------------------------------"
@@ -138,7 +148,7 @@ while true; do
             echo "S-UI面板安装完成！"
             wait_return
             ;;
-        9)
+        10)
             echo ""
             echo "正在检测S-UI面板安装状态..."
             echo "----------------------------------"
@@ -153,7 +163,7 @@ while true; do
             fi
             wait_return
             ;;
-        10)
+        11)
             while true; do
                 clear
                 echo "=================================="
@@ -200,7 +210,7 @@ while true; do
                 esac
             done
             ;;
-        11)
+        12)
             echo ""
             echo "正在执行懒人一键Sing-Box脚本..."
             echo "----------------------------------"
@@ -209,7 +219,7 @@ while true; do
             echo "Sing-Box安装完成！"
             wait_return
             ;;
-        12)
+        13)
             echo ""
             echo "正在执行更多功能脚本..."
             echo "----------------------------------"
@@ -220,7 +230,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "无效选项，请输入0-12之间的数字"
+            echo "无效选项，请输入0-13之间的数字"
             sleep 1
             echo ""
             ;;
