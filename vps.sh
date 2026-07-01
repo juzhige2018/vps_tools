@@ -41,12 +41,13 @@ while true; do
     echo "10. 升级S-UI面板"
     echo "11. Realm转发面板"
     echo "12. 懒人一键Sing-Box"
-    echo "13. 更多功能"
+    echo "13. Argo隧道脚本"
+    echo "88. 更多功能"
     echo "----------------------------------"
     echo "0. 退出脚本"
     echo "=================================="
     echo ""
-    read -p "请输入选项（0-13）: " input
+    read -p "请输入选项（0-13, 88）: " input
 
     if ! [[ "$input" =~ ^[0-9]+$ ]]; then
         echo ""
@@ -221,6 +222,15 @@ while true; do
             ;;
         13)
             echo ""
+            echo "正在执行Argo隧道脚本..."
+            echo "----------------------------------"
+            bash <(curl -Ls https://raw.githubusercontent.com/amclubs/am-serv00-vmess/main/install-argo.sh) || error_exit "Argo隧道脚本执行失败"
+            echo "----------------------------------"
+            echo "Argo隧道脚本执行完成！"
+            wait_return
+            ;;
+        88)
+            echo ""
             echo "正在执行更多功能脚本..."
             echo "----------------------------------"
             bash <(curl -s https://raw.githubusercontent.com/everett7623/vps_scripts/main/vps_scripts.sh) || error_exit "更多功能脚本执行失败"
@@ -230,7 +240,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "无效选项，请输入0-13之间的数字"
+            echo "无效选项，请输入0-13或88"
             sleep 1
             echo ""
             ;;
