@@ -42,12 +42,13 @@ while true; do
     echo "11. Realm转发面板"
     echo "12. 懒人一键Sing-Box"
     echo "13. Argo隧道脚本"
+    echo "14. 网络重装系统"
     echo "88. 更多功能"
     echo "----------------------------------"
     echo "0. 退出脚本"
     echo "=================================="
     echo ""
-    read -p "请输入选项（0-13, 88）: " input
+    read -p "请输入选项（0-14, 88）: " input
 
     if ! [[ "$input" =~ ^[0-9]+$ ]]; then
         echo ""
@@ -229,6 +230,15 @@ while true; do
             echo "Argo隧道脚本执行完成！"
             wait_return
             ;;
+        14)
+            echo ""
+            echo "正在执行DD重装系统脚本..."
+            echo "----------------------------------"
+            wget -N --no-check-certificate https://down.vpsaff.net/linux/dd/network-reinstall-os.sh && chmod +x network-reinstall-os.sh && ./network-reinstall-os.sh || error_exit "网络重装系统脚本执行失败"
+            echo "----------------------------------"
+            echo "DD重装系统脚本执行完成！"
+            wait_return
+            ;;
         88)
             echo ""
             echo "正在执行更多功能脚本..."
@@ -240,7 +250,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "无效选项，请输入0-13或88"
+            echo "无效选项，请输入0-14或88"
             sleep 1
             echo ""
             ;;
