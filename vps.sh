@@ -41,14 +41,16 @@ while true; do
     echo "10. 升级S-UI面板"
     echo "11. Realm转发面板"
     echo "12. 懒人一键Sing-Box"
+    echo "----------------------------------"
     echo "13. Argo隧道脚本"
     echo "14. 网络重装系统"
+    echo "15. BBR加速脚本"
     echo "88. 更多功能"
     echo "----------------------------------"
     echo "0. 退出脚本"
     echo "=================================="
     echo ""
-    read -p "请输入选项（0-14, 88）: " input
+    read -p "请输入选项（0-15, 88）: " input
 
     if ! [[ "$input" =~ ^[0-9]+$ ]]; then
         echo ""
@@ -232,11 +234,20 @@ while true; do
             ;;
         14)
             echo ""
-            echo "正在执行DD重装系统脚本..."
+            echo "正在执行网络重装系统脚本..."
             echo "----------------------------------"
             wget -N --no-check-certificate https://down.vpsaff.net/linux/dd/network-reinstall-os.sh && chmod +x network-reinstall-os.sh && ./network-reinstall-os.sh || error_exit "网络重装系统脚本执行失败"
             echo "----------------------------------"
-            echo "DD重装系统脚本执行完成！"
+            echo "网络重装系统脚本执行完成！"
+            wait_return
+            ;;
+        15)
+            echo ""
+            echo "正在执行BBR加速脚本..."
+            echo "----------------------------------"
+            bash <(curl -fsSL https://vpszdm.com/bbr.sh) || error_exit "BBR加速脚本执行失败"
+            echo "----------------------------------"
+            echo "BBR加速脚本执行完成！"
             wait_return
             ;;
         88)
@@ -250,7 +261,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "无效选项，请输入0-14或88"
+            echo "无效选项，请输入0-15或88"
             sleep 1
             echo ""
             ;;
